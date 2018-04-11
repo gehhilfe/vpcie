@@ -7,14 +7,16 @@ vlib msim/xpm
 vmap xil_defaultlib msim/xil_defaultlib
 vmap xpm msim/xpm
 
+set VIVADO_ROOT "/opt/remote/rsstudent/tools/xilinx/vivado/2017.2/Vivado/2017.2"
+
 vlog -64 -incr -sv -work xil_defaultlib  "+incdir+imports" \
-"/opt/Xilinx/Vivado/2017.2/data/ip/xpm/xpm_cdc/hdl/xpm_cdc.sv" \
-"/opt/Xilinx/Vivado/2017.2/data/ip/xpm/xpm_memory/hdl/xpm_memory.sv" \
+"$VIVADO_ROOT/data/ip/xpm/xpm_cdc/hdl/xpm_cdc.sv" \
+"$VIVADO_ROOT/data/ip/xpm/xpm_memory/hdl/xpm_memory.sv" \
 
 vcom -64 -93 -work xpm  \
-"/opt/Xilinx/Vivado/2017.2/data/ip/xpm/xpm_VCOMP.vhd" \
+"$VIVADO_ROOT/data/ip/xpm/xpm_VCOMP.vhd" \
 
-vlog vpcieHeader.v
+vlog -64 -incr -work xil_defaultlib vpcieHeader.v
 
 vlog -64 -incr -work xil_defaultlib  "+incdir+imports" \
 "pcie_7x_0_ex.srcs/sources_1/ip/pcie_7x_0/source/pcie_7x_0_pipe_eq.v" \
@@ -84,4 +86,10 @@ vlog -work xil_defaultlib "glbl.v"
 
 
 vsim -pli ../cmake-build-debug/libvpi.so -t 1ps -voptargs="+acc" -L xil_defaultlib -L xpm -L unisims_ver -L unimacro_ver -L secureip -lib xil_defaultlib xil_defaultlib.board xil_defaultlib.glbl
-run 100us
+
+view wave
+
+add wave -position end -group VPCIE-Status sim:/board/RP/vpcie_status_inst/*
+add wave -position end -group VPCIE-Header sim:/board/RP/vpcie_header_inst/*
+
+run 100ns

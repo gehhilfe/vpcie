@@ -92,6 +92,36 @@ module xilinx_pcie_2_1_rport_7x # (
 
 );
 
+
+  // VPCIE Interface
+  
+  wire vpcie_running;
+  wire vpcie_connected;
+  wire [7:0] vpcie_header_op;
+
+  vpcie_status vpcie_status_inst (
+    .running(vpcie_running),
+    .connected(vpcie_connected)
+  );
+
+  vpcie_header vpcie_header_inst (
+    .op(vpcie_header_op)
+  );
+
+  initial begin
+    $setHeaderModule(vpcie_header_inst);
+    $setStatusModule(vpcie_status_inst);
+    #10;
+    $vpcieStart();
+    #100;
+    $vpcieStop();
+  end
+
+  always @(posedge sys_clk) begin
+    if(vpcie_running)
+      $vpcieTick();
+  end
+
   // Local Wires
   // Common
   wire                            trn_clk;

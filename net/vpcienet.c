@@ -113,7 +113,7 @@ ssize_t pcie_net_recv_buf(pcie_net_t *net, void *buf, size_t max_size) {
     ssize_t n;
     size_t rem_size;
 
-    /* header always comes first */
+    /* headerModule always comes first */
     if (max_size < sizeof(h)) {
         PERROR();
         return -1;
