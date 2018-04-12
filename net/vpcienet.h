@@ -53,10 +53,8 @@ typedef unsigned int (*pcie_net_recvfn_t)(const pcie_net_msg_t *, pcie_net_reply
 typedef int (*pcie_net_evfn_t)(unsigned int, void *);
 
 typedef struct pcie_net {
-#if (CONFIG_USE_UDP == 0)
     /* accepting socket fd */
     int server_fd;
-#endif
 
     /* peer socket fd */
     int fd;
@@ -70,10 +68,9 @@ typedef struct pcie_net {
     struct timeval task_tm;
     pcie_net_taskfn_t task_fn;
     void *task_data;
-
 } pcie_net_t;
 
-int pcie_net_init(pcie_net_t *, const char *, const char *, const char *, const char *);
+int pcie_net_init(pcie_net_t *, const char *, const char *);
 
 int pcie_net_fini(pcie_net_t *);
 

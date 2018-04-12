@@ -94,18 +94,32 @@ module xilinx_pcie_2_1_rport_7x # (
 
 
   // VPCIE Interface
-  
+
   wire vpcie_running;
   wire vpcie_connected;
+  wire vpcie_new_msg;
   wire [7:0] vpcie_header_op;
+  wire [7:0] vpcie_header_bar;
+  wire [7:0] vpcie_header_width;
+  wire [63:0] vpcie_header_addr;
+  wire [15:0] vpcie_header_size;
+  wire [31:0] vpcie_word_data;
+  wire vpcie_credit_token;
 
   vpcie_status vpcie_status_inst (
     .running(vpcie_running),
-    .connected(vpcie_connected)
+    .connected(vpcie_connected),
+    .creditToken(vpcie_credit_token)
   );
 
   vpcie_header vpcie_header_inst (
-    .op(vpcie_header_op)
+    .op(vpcie_header_op),
+    .bar(vpcie_header_bar),
+    .width(vpcie_header_width),
+    .addr(vpcie_header_addr),
+    .size(vpcie_header_size),
+    .new_msg(vpcie_new_msg),
+    .word_data(vpcie_word_data)
   );
 
   initial begin
@@ -113,13 +127,10 @@ module xilinx_pcie_2_1_rport_7x # (
     $setStatusModule(vpcie_status_inst);
     #10;
     $vpcieStart();
-    #100;
-    $vpcieStop();
   end
 
-  always @(posedge sys_clk) begin
-    if(vpcie_running)
-      $vpcieTick();
+  always @ (posedge sys_clk) begin
+      if(vpcie_connected) $vpcieTick();
   end
 
   // Local Wires
@@ -494,25 +505,25 @@ module xilinx_pcie_2_1_rport_7x # (
     //----------------------------------------------------------------------------------------------------------------//
     // 8. System  (SYS) Interface                                                                                     //
     //----------------------------------------------------------------------------------------------------------------//
-    .common_commands_in           ( 12'b0 ), 
-    .pipe_rx_0_sigs               ( 25'b0 ), 
-    .pipe_rx_1_sigs               ( 25'b0 ), 
-    .pipe_rx_2_sigs               ( 25'b0 ), 
-    .pipe_rx_3_sigs               ( 25'b0 ), 
-    .pipe_rx_4_sigs               ( 25'b0 ), 
-    .pipe_rx_5_sigs               ( 25'b0 ), 
-    .pipe_rx_6_sigs               ( 25'b0 ), 
-    .pipe_rx_7_sigs               ( 25'b0 ), 
-                                                       
-    .common_commands_out          (  ), 
-    .pipe_tx_0_sigs               (  ), 
-    .pipe_tx_1_sigs               (  ), 
-    .pipe_tx_2_sigs               (  ), 
-    .pipe_tx_3_sigs               (  ), 
-    .pipe_tx_4_sigs               (  ), 
-    .pipe_tx_5_sigs               (  ), 
-    .pipe_tx_6_sigs               (  ), 
-    .pipe_tx_7_sigs               (  ), 
+    .common_commands_in           ( 12'b0 ),
+    .pipe_rx_0_sigs               ( 25'b0 ),
+    .pipe_rx_1_sigs               ( 25'b0 ),
+    .pipe_rx_2_sigs               ( 25'b0 ),
+    .pipe_rx_3_sigs               ( 25'b0 ),
+    .pipe_rx_4_sigs               ( 25'b0 ),
+    .pipe_rx_5_sigs               ( 25'b0 ),
+    .pipe_rx_6_sigs               ( 25'b0 ),
+    .pipe_rx_7_sigs               ( 25'b0 ),
+
+    .common_commands_out          (  ),
+    .pipe_tx_0_sigs               (  ),
+    .pipe_tx_1_sigs               (  ),
+    .pipe_tx_2_sigs               (  ),
+    .pipe_tx_3_sigs               (  ),
+    .pipe_tx_4_sigs               (  ),
+    .pipe_tx_5_sigs               (  ),
+    .pipe_tx_6_sigs               (  ),
+    .pipe_tx_7_sigs               (  ),
 
     .pipe_mmcm_rst_n                           ( 1'b1 ),        // Async      | Async
     .sys_clk                                   ( sys_clk ),
@@ -565,7 +576,19 @@ module xilinx_pcie_2_1_rport_7x # (
     .trn_tsrc_dsc_n                  ( trn_tsrc_dsc_n ),
     .trn_tdst_dsc_n                  ( ~trn_tdst_dsc ),
     .trn_tbuf_av                     ( trn_tbuf_av ),
-    .speed_change_done_n             ( speed_change_done_n )
+    .speed_change_done_n             ( speed_change_done_n ),
+
+
+    .vpice_running(vpice_running),
+    .vpice_connected(vpcie_connected),
+    .vpcie_new_msg(vpcie_new_msg),
+    .vpcie_header_op(vpcie_header_op),
+    .vpcie_header_bar(vpcie_header_bar),
+    .vpcie_header_width(vpcie_header_width),
+    .vpcie_header_addr(vpcie_header_addr),
+    .vpcie_header_size(vpcie_header_size),
+    .vpcie_credit_token(vpcie_credit_token),
+    .vpcie_word_data(vpcie_word_data)
 
   );
 

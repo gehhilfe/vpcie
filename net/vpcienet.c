@@ -25,7 +25,7 @@ do { printf(__s, ## __VA_ARGS__); } while (0)
 #define PERROR()
 #endif
 
-static int open_tcp_socket(const char *laddr, const char *lport, const char *raddr, const char *rport, int *server_fd,
+static int open_tcp_socket(const char *laddr, const char *lport, int *server_fd,
                            int *client_fd) {
     static const int on = 1;
 
@@ -88,13 +88,13 @@ static int open_tcp_socket(const char *laddr, const char *lport, const char *rad
     return -1;
 }
 
-int pcie_net_init(pcie_net_t *net, const char *laddr, const char *lport, const char *raddr, const char *rport) {
+int pcie_net_init(pcie_net_t *net, const char *laddr, const char *lport) {
     /* important, use by event pump */
     net->task_fn = NULL;
 
     net->ev_fd = -1;
 
-    if (open_tcp_socket(laddr, lport, raddr, rport, &net->server_fd, &net->fd))
+    if (open_tcp_socket(laddr, lport, &net->server_fd, &net->fd))
         return -1;
 
     return 0;
@@ -228,5 +228,15 @@ int pcie_net_loop(pcie_net_t *net, pcie_net_recvfn_t on_msg_recv, void *opak) {
 
     free(msg);
 
+    return 0;
+}
+
+ssize_t pcie_net_send_buf(pcie_net_t* net, const void* buf, size_t size)
+{
+    ssize_t n;
+
+    n = send(net->fd, buf, size, 0);
+
+    if (n != size) { PERROR(); return -1; }
     return 0;
 }

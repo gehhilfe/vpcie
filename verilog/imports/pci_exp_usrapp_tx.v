@@ -74,9 +74,33 @@ parameter                                      LINK_CAP_MAX_LINK_SPEED = 4'h2
                                                trn_tdst_dsc_n,
                                                trn_tbuf_av,
 
-                                               speed_change_done_n
+                                               speed_change_done_n,
+
+                                               // vpcie header signals
+                                               vpice_running,
+                                               vpice_connected,
+                                               vpcie_new_msg,
+                                               vpcie_header_op,
+                                               vpcie_header_bar,
+                                               vpcie_header_width,
+                                               vpcie_header_addr,
+                                               vpcie_header_size,
+                                               vpcie_credit_token,
+                                               vpcie_word_data
+
 
                                              );
+
+input wire vpice_running;
+input wire vpice_connected;
+input wire vpcie_new_msg;
+input wire [7:0] vpcie_header_op;
+input wire [7:0] vpcie_header_bar;
+input wire [7:0] vpcie_header_width;
+input wire [63:0] vpcie_header_addr;
+input wire [15:0] vpcie_header_size;
+output reg vpcie_credit_token;
+input wire [31:0] vpcie_word_data;
 
 output [(128 - 1):0]                           trn_td;
 output [1:0]                                   trn_trem_n;
@@ -297,6 +321,7 @@ end
   reg expect_status;
   reg expect_finish_check;
   reg test_failed_flag;
+  reg system_ready = 0;
 
   initial begin
     if ($value$plusargs("TESTNAME=%s", testname))
@@ -324,15 +349,104 @@ end
     TSK_USR_DATA_SETUP_SEQ;
 
     //Test starts here
-    if (testname == "dummy_test")
+    /*if (testname == "dummy_test")
     begin
       $display("[%t] %m: Invalid TESTNAME: %0s", $realtime, testname);
       $finish(2);
     end
-    `include "tests.vh"
+    //`include "tests.vh"
     else begin
       $display("[%t] %m: Error: Unrecognized TESTNAME: %0s", $realtime, testname);
       $finish(2);
+    end*/
+
+    //board.RP.tx_usrapp.TSK_SIMULATION_TIMEOUT(10050);
+
+    TSK_SYSTEM_INITIALIZATION;
+    TSK_BAR_INIT;
+    system_ready <= 1;
+  end
+
+  /// VPCIE STATE Machine
+
+  reg [31:0] vp_state;
+  reg [31:0] vp_state_next;
+  localparam
+    lp_state_wait_running = 0,
+    lp_state_idle = 1,
+    lp_state_handle_write_config = 2,
+    lp_state_handle_read_config = 3,
+    lp_state_handle_write_mem = 4,
+    lp_state_handle_read_mem = 5;
+
+  `define OP_READ_CONFIG 0
+  `define OP_WRITE_CONFIG 1
+  `define OP_READ_MEM 2
+  `define OP_WRITE_MEM 3
+
+  always @ ( * ) begin
+    vp_state_next = vp_state;
+    vpcie_credit_token = 0;
+    case(vp_state)
+        lp_state_wait_running: begin
+            if(system_ready) vp_state_next = lp_state_idle;
+        end
+        lp_state_idle: begin
+            vpcie_credit_token = 1;
+            if(vpcie_new_msg) begin
+                case(vpcie_header_op)
+                    `OP_READ_CONFIG: vp_state_next = lp_state_handle_read_config;
+                    `OP_WRITE_CONFIG: vp_state_next = lp_state_handle_write_config;
+                    `OP_READ_MEM: vp_state_next = lp_state_handle_read_mem;
+                    `OP_WRITE_MEM: vp_state_next = lp_state_handle_write_mem;
+                endcase
+            end
+        end
+        lp_state_handle_write_config: begin
+            $vpcieReadData(0);
+            TSK_TX_CLK_EAT(5);
+            TSK_TX_TYPE0_CONFIGURATION_WRITE(DEFAULT_TAG, vpcie_header_addr, vpcie_word_data, 4'hF);
+            DEFAULT_TAG = DEFAULT_TAG + 1;
+            TSK_TX_CLK_EAT(100);
+            vp_state_next = lp_state_idle;
+        end
+        lp_state_handle_read_config: begin
+            TSK_TX_TYPE0_CONFIGURATION_READ(DEFAULT_TAG, vpcie_header_addr, 4'hF);
+            DEFAULT_TAG = DEFAULT_TAG + 1;
+            TSK_WAIT_FOR_READ_DATA;
+            $vpcieSendConfigResponse(P_READ_DATA);
+            vp_state_next = lp_state_idle;
+        end
+        lp_state_handle_write_mem: begin
+            $vpcieReadData(0);
+            TSK_TX_CLK_EAT(5);
+            DATA_STORE[0] = vpcie_word_data & 8'hFF;
+            DATA_STORE[1] = (vpcie_word_data>>8) & 8'hFF;
+            DATA_STORE[2] = (vpcie_word_data>>16) & 8'hFF;
+            DATA_STORE[3] = (vpcie_word_data>>24) & 8'hFF;
+            TSK_TX_MEMORY_WRITE_32(DEFAULT_TAG,
+                DEFAULT_TC, 10'd1,
+                vpcie_header_addr+8'h10, 4'h0, 4'hF, 1'b0);
+            TSK_TX_CLK_EAT(10);
+            DEFAULT_TAG = DEFAULT_TAG + 1;
+            vp_state_next = lp_state_idle;
+        end
+        lp_state_handle_read_mem: begin
+            TSK_TX_MEMORY_READ_32(DEFAULT_TAG,
+                DEFAULT_TC, 10'd1,
+                vpcie_header_addr+8'h10, 4'h0, 4'hF);
+            TSK_WAIT_FOR_READ_DATA;
+            $vpcieSendMemReadResponse(P_READ_DATA);
+            DEFAULT_TAG = DEFAULT_TAG + 1;
+            vp_state_next = lp_state_idle;
+        end
+    endcase
+  end
+  always @(posedge trn_clk) begin
+    if (!trn_reset_n) begin
+      vp_state <= lp_state_wait_running;
+    end else begin
+      vp_state <= vp_state_next;
     end
   end
 
@@ -574,6 +688,8 @@ end
         input    [31:0]    reg_data_;
         input    [3:0]    first_dw_be_;
         begin
+            $display("DEBUG: %x %x %x %x", tag_, reg_addr_, reg_data_, first_dw_be_);
+
             if (trn_lnk_up_n) begin
 
                 $display("[%t] : Trn interface is MIA", $realtime);
@@ -702,6 +818,7 @@ end
         input    [3:0]    last_dw_be_;
         input    [3:0]    first_dw_be_;
         begin
+            $display("TSK_TX_MEMORY_READ_32(%d, %d, %d, 0x%x, %d, %d)\n", tag_, tc_, len_, addr_, last_dw_be_, first_dw_be_);
             if (trn_lnk_up_n) begin
 
                 $display("[%t] : Trn interface is MIA", $realtime);
@@ -824,7 +941,7 @@ end
         reg    [10:0]    _len;
         integer        _j;
         begin
-
+            $display("TSK_TX_MEMORY_WRITE_32(%d, %d, %d, 0x%x, %d, %d, %d)\n", tag_, tc_, len_, addr_, last_dw_be_, first_dw_be_, ep_);
             if (len_ == 0)
 
                 _len = 1024;

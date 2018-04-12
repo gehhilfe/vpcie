@@ -91,5 +91,7 @@ view wave
 
 add wave -position end -group VPCIE-Status sim:/board/RP/vpcie_status_inst/*
 add wave -position end -group VPCIE-Header sim:/board/RP/vpcie_header_inst/*
-
-run 100ns
+add wave -position end -group tx_usrapp sim:/board/RP/tx_usrapp/*
+add wave -position end -group PIO-s sim:/board/EP/app/PIO/s*
+add wave -position end -group PIO-m sim:/board/EP/app/PIO/m*
+run -all
