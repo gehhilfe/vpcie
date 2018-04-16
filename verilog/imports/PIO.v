@@ -98,7 +98,7 @@ module PIO #(
 
 ); // synthesis syn_hier = "hard"
 
-
+  `include "xilinx_pcie_ep_init.vh"
   // Local wires
 
   wire          req_compl;
@@ -165,4 +165,3 @@ module PIO #(
 
 
 endmodule // PIO
-

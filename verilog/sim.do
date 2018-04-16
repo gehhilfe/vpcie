@@ -18,7 +18,9 @@ vcom -64 -93 -work xpm  \
 
 vlog -64 -incr -work xil_defaultlib vpcieHeader.v
 
-vlog -64 -incr -work xil_defaultlib  "+incdir+imports" \
+do "xilinx-pcie-axi-dma/compile.do"
+
+vlog -64 -incr -work xil_defaultlib  "+incdir+imports"  "+incdir+xilinx-pcie-axi-dma"\
 "pcie_7x_0_ex.srcs/sources_1/ip/pcie_7x_0/source/pcie_7x_0_pipe_eq.v" \
 "pcie_7x_0_ex.srcs/sources_1/ip/pcie_7x_0/source/pcie_7x_0_pipe_drp.v" \
 "pcie_7x_0_ex.srcs/sources_1/ip/pcie_7x_0/source/pcie_7x_0_pipe_rate.v" \
@@ -94,4 +96,7 @@ add wave -position end -group VPCIE-Header sim:/board/RP/vpcie_header_inst/*
 add wave -position end -group tx_usrapp sim:/board/RP/tx_usrapp/*
 add wave -position end -group PIO-s sim:/board/EP/app/PIO/s*
 add wave -position end -group PIO-m sim:/board/EP/app/PIO/m*
+
+do "xilinx-pcie-axi-dma/wave.do"
+
 run -all
