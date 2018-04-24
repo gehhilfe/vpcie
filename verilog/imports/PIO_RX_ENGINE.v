@@ -1101,4 +1101,3 @@ assign    erom_bar_hit_n  = ~(m_axis_rx_tuser[8]);
   // synthesis translate_on
 
 endmodule // PIO_RX_ENGINE
-

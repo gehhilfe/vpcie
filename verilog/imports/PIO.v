@@ -98,7 +98,6 @@ module PIO #(
 
 ); // synthesis syn_hier = "hard"
 
-  `include "xilinx_pcie_ep_init.vh"
   // Local wires
 
   wire          req_compl;
@@ -112,10 +111,13 @@ module PIO #(
         pio_reset_n <= #TCQ user_lnk_up;
   end
 
+
+  `include "xilinx_pcie_ep_init.vh"
+
   //
   // PIO instance
   //
-
+/*
   PIO_EP  #(
     .C_DATA_WIDTH( C_DATA_WIDTH ),
     .KEEP_WIDTH( KEEP_WIDTH ),
@@ -144,7 +146,7 @@ module PIO #(
 
     .cfg_completer_id ( cfg_completer_id )        // I [15:0]
   );
-
+*/
 
   //
   // Turn-Off controller
