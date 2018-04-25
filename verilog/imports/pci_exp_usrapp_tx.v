@@ -426,7 +426,7 @@ end
             DATA_STORE[3] = (vpcie_word_data>>24) & 8'hFF;
             TSK_TX_MEMORY_WRITE_32(DEFAULT_TAG,
                 DEFAULT_TC, 10'd1,
-                vpcie_header_addr+8'h10, 4'h0, 4'hF, 1'b0);
+                vpcie_header_addr, 4'h0, 4'hF, 1'b0);
             TSK_TX_CLK_EAT(10);
             DEFAULT_TAG = DEFAULT_TAG + 1;
             vp_state_next = lp_state_idle;
@@ -434,7 +434,7 @@ end
         lp_state_handle_read_mem: begin
             TSK_TX_MEMORY_READ_32(DEFAULT_TAG,
                 DEFAULT_TC, 10'd1,
-                vpcie_header_addr+8'h10, 4'h0, 4'hF);
+                vpcie_header_addr, 4'h0, 4'hF);
             TSK_WAIT_FOR_READ_DATA;
             $vpcieSendMemReadResponse(P_READ_DATA);
             DEFAULT_TAG = DEFAULT_TAG + 1;
