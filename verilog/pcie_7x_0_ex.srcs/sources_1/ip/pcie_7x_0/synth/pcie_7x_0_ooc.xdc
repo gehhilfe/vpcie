@@ -60,17 +60,17 @@
 create_clock -name pcie_7x_0_sys_clk -period 10 [get_ports sys_clk]
 # 100/125/250 MHz
 
-create_clock -name pcie_7x_0_pclk -period 8 [get_ports pipe_pclk_in]
+create_clock -name pcie_7x_0_pclk -period 4 [get_ports pipe_pclk_in]
 # 125/250 MHz
 
-create_clock -name pcie_7x_0_rxusrclk -period 8 [get_ports pipe_rxusrclk_in]
+create_clock -name pcie_7x_0_rxusrclk -period 4 [get_ports pipe_rxusrclk_in]
 # 125/250 MHz 
 
 create_clock -name pcie_7x_0_dclk -period 8 [get_ports pipe_dclk_in]
 # 125 MHz
 
-create_clock -name pcie_7x_0_usrclk1 -period 4 [get_ports pipe_userclk1_in]
-create_clock -name pcie_7x_0_usrclk2 -period 8 [get_ports pipe_userclk2_in]
+create_clock -name pcie_7x_0_usrclk1 -period 2 [get_ports pipe_userclk1_in]
+create_clock -name pcie_7x_0_usrclk2 -period 4 [get_ports pipe_userclk2_in]
 
-create_clock -name pcie_7x_0_oobclk -period 8 [get_ports pipe_oobclk_in]
+create_clock -name pcie_7x_0_oobclk -period 4 [get_ports pipe_oobclk_in]
 # 50 MHz , 125/250 MHz

@@ -2991,7 +2991,7 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>outputProductCRC</spirit:name>
-            <spirit:value>7:57075db7</spirit:value>
+            <spirit:value>7:a89562af</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -3006,11 +3006,11 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>GENtimestamp</spirit:name>
-            <spirit:value>Wed Apr 11 07:58:41 UTC 2018</spirit:value>
+            <spirit:value>Sat May 05 10:35:33 UTC 2018</spirit:value>
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>outputProductCRC</spirit:name>
-            <spirit:value>7:b4863934</spirit:value>
+            <spirit:value>7:13a9fdda</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -3026,11 +3026,11 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>GENtimestamp</spirit:name>
-            <spirit:value>Wed Apr 11 07:58:48 UTC 2018</spirit:value>
+            <spirit:value>Sat May 05 10:35:37 UTC 2018</spirit:value>
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>outputProductCRC</spirit:name>
-            <spirit:value>7:b4863934</spirit:value>
+            <spirit:value>7:13a9fdda</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -3045,11 +3045,11 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>GENtimestamp</spirit:name>
-            <spirit:value>Wed Apr 11 07:58:48 UTC 2018</spirit:value>
+            <spirit:value>Sat May 05 10:35:37 UTC 2018</spirit:value>
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>outputProductCRC</spirit:name>
-            <spirit:value>7:b4863934</spirit:value>
+            <spirit:value>7:13a9fdda</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -3065,11 +3065,11 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>GENtimestamp</spirit:name>
-            <spirit:value>Wed Apr 11 07:58:48 UTC 2018</spirit:value>
+            <spirit:value>Sat May 05 10:35:37 UTC 2018</spirit:value>
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>outputProductCRC</spirit:name>
-            <spirit:value>7:e29ea87f</spirit:value>
+            <spirit:value>7:2b3979fa</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -3084,11 +3084,11 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>GENtimestamp</spirit:name>
-            <spirit:value>Wed Apr 11 07:58:48 UTC 2018</spirit:value>
+            <spirit:value>Sat May 05 10:35:37 UTC 2018</spirit:value>
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>outputProductCRC</spirit:name>
-            <spirit:value>7:e29ea87f</spirit:value>
+            <spirit:value>7:2b3979fa</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -3102,11 +3102,11 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>GENtimestamp</spirit:name>
-            <spirit:value>Wed Apr 11 07:58:48 UTC 2018</spirit:value>
+            <spirit:value>Sat May 05 10:35:37 UTC 2018</spirit:value>
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>outputProductCRC</spirit:name>
-            <spirit:value>7:b4863934</spirit:value>
+            <spirit:value>7:13a9fdda</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -3120,11 +3120,11 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>GENtimestamp</spirit:name>
-            <spirit:value>Wed Apr 11 08:00:15 UTC 2018</spirit:value>
+            <spirit:value>Sat May 05 10:36:56 UTC 2018</spirit:value>
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>outputProductCRC</spirit:name>
-            <spirit:value>7:b4863934</spirit:value>
+            <spirit:value>7:13a9fdda</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -9614,15 +9614,15 @@
       </spirit:modelParameter>
       <spirit:modelParameter spirit:dataType="string">
         <spirit:name>max_lnk_spd</spirit:name>
-        <spirit:value spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.max_lnk_spd">1</spirit:value>
+        <spirit:value spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.max_lnk_spd">2</spirit:value>
       </spirit:modelParameter>
       <spirit:modelParameter spirit:dataType="boolean">
         <spirit:name>c_gen1</spirit:name>
-        <spirit:value spirit:format="bool" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.c_gen1">false</spirit:value>
+        <spirit:value spirit:format="bool" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.c_gen1">true</spirit:value>
       </spirit:modelParameter>
       <spirit:modelParameter spirit:dataType="integer">
         <spirit:name>pci_exp_int_freq</spirit:name>
-        <spirit:value spirit:format="long" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.pci_exp_int_freq">2</spirit:value>
+        <spirit:value spirit:format="long" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.pci_exp_int_freq">3</spirit:value>
       </spirit:modelParameter>
       <spirit:modelParameter spirit:dataType="integer">
         <spirit:name>c_pcie_fast_config</spirit:name>
@@ -9630,7 +9630,7 @@
       </spirit:modelParameter>
       <spirit:modelParameter spirit:dataType="string">
         <spirit:name>bar_0</spirit:name>
-        <spirit:value spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.bar_0">FFFFF800</spirit:value>
+        <spirit:value spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.bar_0">FFE00000</spirit:value>
       </spirit:modelParameter>
       <spirit:modelParameter spirit:dataType="string">
         <spirit:name>bar_1</spirit:name>
@@ -9666,7 +9666,7 @@
       </spirit:modelParameter>
       <spirit:modelParameter spirit:dataType="string">
         <spirit:name>dev_id</spirit:name>
-        <spirit:value spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.dev_id">7018</spirit:value>
+        <spirit:value spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.dev_id">7028</spirit:value>
       </spirit:modelParameter>
       <spirit:modelParameter spirit:dataType="string">
         <spirit:name>rev_id</spirit:name>
@@ -9698,11 +9698,11 @@
       </spirit:modelParameter>
       <spirit:modelParameter spirit:dataType="string">
         <spirit:name>mps</spirit:name>
-        <spirit:value spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.mps">010</spirit:value>
+        <spirit:value spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.mps">001</spirit:value>
       </spirit:modelParameter>
       <spirit:modelParameter spirit:dataType="string">
         <spirit:name>cmps</spirit:name>
-        <spirit:value spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.cmps">2</spirit:value>
+        <spirit:value spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.cmps">1</spirit:value>
       </spirit:modelParameter>
       <spirit:modelParameter spirit:dataType="string">
         <spirit:name>ext_tag_fld_sup</spirit:name>
@@ -9758,11 +9758,11 @@
       </spirit:modelParameter>
       <spirit:modelParameter spirit:dataType="string">
         <spirit:name>c_tx_last_tlp</spirit:name>
-        <spirit:value spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.c_tx_last_tlp">29</spirit:value>
+        <spirit:value spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.c_tx_last_tlp">28</spirit:value>
       </spirit:modelParameter>
       <spirit:modelParameter spirit:dataType="string">
         <spirit:name>c_rx_ram_limit</spirit:name>
-        <spirit:value spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.c_rx_ram_limit">7FF</spirit:value>
+        <spirit:value spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.c_rx_ram_limit">3FF</spirit:value>
       </spirit:modelParameter>
       <spirit:modelParameter spirit:dataType="string">
         <spirit:name>c_fc_ph</spirit:name>
@@ -9770,7 +9770,7 @@
       </spirit:modelParameter>
       <spirit:modelParameter spirit:dataType="string">
         <spirit:name>c_fc_pd</spirit:name>
-        <spirit:value spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.c_fc_pd">437</spirit:value>
+        <spirit:value spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.c_fc_pd">181</spirit:value>
       </spirit:modelParameter>
       <spirit:modelParameter spirit:dataType="string">
         <spirit:name>c_fc_nph</spirit:name>
@@ -9786,7 +9786,7 @@
       </spirit:modelParameter>
       <spirit:modelParameter spirit:dataType="string">
         <spirit:name>c_fc_cpld</spirit:name>
-        <spirit:value spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.c_fc_cpld">461</spirit:value>
+        <spirit:value spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.c_fc_cpld">205</spirit:value>
       </spirit:modelParameter>
       <spirit:modelParameter spirit:dataType="string">
         <spirit:name>c_cpl_inf</spirit:name>
@@ -9802,7 +9802,7 @@
       </spirit:modelParameter>
       <spirit:modelParameter spirit:dataType="string">
         <spirit:name>c_trgt_lnk_spd</spirit:name>
-        <spirit:value spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.c_trgt_lnk_spd">0</spirit:value>
+        <spirit:value spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.c_trgt_lnk_spd">2</spirit:value>
       </spirit:modelParameter>
       <spirit:modelParameter spirit:dataType="string">
         <spirit:name>c_hw_auton_spd_disable</spirit:name>
@@ -10481,6 +10481,10 @@
       <spirit:enumeration>5</spirit:enumeration>
     </spirit:choice>
     <spirit:choice>
+      <spirit:name>choice_list_6b979ebc</spirit:name>
+      <spirit:enumeration>250</spirit:enumeration>
+    </spirit:choice>
+    <spirit:choice>
       <spirit:name>choice_list_7181bfa4</spirit:name>
       <spirit:enumeration>X1Y0</spirit:enumeration>
       <spirit:enumeration>X1Y1</spirit:enumeration>
@@ -10532,10 +10536,6 @@
     <spirit:choice>
       <spirit:name>choice_list_ac75ef1e</spirit:name>
       <spirit:enumeration>Custom</spirit:enumeration>
-    </spirit:choice>
-    <spirit:choice>
-      <spirit:name>choice_list_b2f7e7f8</spirit:name>
-      <spirit:enumeration>125</spirit:enumeration>
     </spirit:choice>
     <spirit:choice>
       <spirit:name>choice_list_c15e8c67</spirit:name>
@@ -10645,18 +10645,6 @@
       <spirit:enumeration spirit:text="No limit">No_limit</spirit:enumeration>
     </spirit:choice>
     <spirit:choice>
-      <spirit:name>choice_pairs_395c7aad</spirit:name>
-      <spirit:enumeration spirit:text="64 bit">64_bit</spirit:enumeration>
-      <spirit:enumeration spirit:text="128 bit">128_bit</spirit:enumeration>
-    </spirit:choice>
-    <spirit:choice>
-      <spirit:name>choice_pairs_3f2631bf</spirit:name>
-      <spirit:enumeration spirit:text="128 bytes">128_bytes</spirit:enumeration>
-      <spirit:enumeration spirit:text="256 bytes">256_bytes</spirit:enumeration>
-      <spirit:enumeration spirit:text="512 bytes">512_bytes</spirit:enumeration>
-      <spirit:enumeration spirit:text="1024 bytes">1024_bytes</spirit:enumeration>
-    </spirit:choice>
-    <spirit:choice>
       <spirit:name>choice_pairs_49d248fb</spirit:name>
       <spirit:enumeration spirit:text="BAR 0">BAR_0</spirit:enumeration>
     </spirit:choice>
@@ -10750,6 +10738,15 @@
       <spirit:enumeration spirit:text="PCI Express Endpoint device">PCI_Express_Endpoint_device</spirit:enumeration>
       <spirit:enumeration spirit:text="Legacy PCI Express Endpoint device">Legacy_PCI_Express_Endpoint_device</spirit:enumeration>
       <spirit:enumeration spirit:text="Root Port of PCI Express Root Complex">Root_Port_of_PCI_Express_Root_Complex</spirit:enumeration>
+    </spirit:choice>
+    <spirit:choice>
+      <spirit:name>choice_pairs_dce95f24</spirit:name>
+      <spirit:enumeration spirit:text="128 bit">128_bit</spirit:enumeration>
+    </spirit:choice>
+    <spirit:choice>
+      <spirit:name>choice_pairs_fb6cd8be</spirit:name>
+      <spirit:enumeration spirit:text="128 bytes">128_bytes</spirit:enumeration>
+      <spirit:enumeration spirit:text="256 bytes">256_bytes</spirit:enumeration>
     </spirit:choice>
   </spirit:choices>
   <spirit:fileSets>
@@ -11246,15 +11243,15 @@
     </spirit:parameter>
     <spirit:parameter>
       <spirit:name>Link_Speed</spirit:name>
-      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.Link_Speed" spirit:choiceRef="choice_pairs_d06c0498" spirit:order="104">2.5_GT/s</spirit:value>
+      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.Link_Speed" spirit:choiceRef="choice_pairs_d06c0498" spirit:order="104">5.0_GT/s</spirit:value>
     </spirit:parameter>
     <spirit:parameter>
       <spirit:name>Interface_Width</spirit:name>
-      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.Interface_Width" spirit:choiceRef="choice_pairs_395c7aad" spirit:order="105">128_bit</spirit:value>
+      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.Interface_Width" spirit:choiceRef="choice_pairs_dce95f24" spirit:order="105">128_bit</spirit:value>
     </spirit:parameter>
     <spirit:parameter>
       <spirit:name>User_Clk_Freq</spirit:name>
-      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.User_Clk_Freq" spirit:choiceRef="choice_list_b2f7e7f8" spirit:order="106">125</spirit:value>
+      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.User_Clk_Freq" spirit:choiceRef="choice_list_6b979ebc" spirit:order="106">250</spirit:value>
     </spirit:parameter>
     <spirit:parameter>
       <spirit:name>Bar0_Enabled</spirit:name>
@@ -11274,7 +11271,7 @@
     </spirit:parameter>
     <spirit:parameter>
       <spirit:name>Bar0_Scale</spirit:name>
-      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.Bar0_Scale" spirit:choiceRef="choice_list_52d29139" spirit:order="205">Kilobytes</spirit:value>
+      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.Bar0_Scale" spirit:choiceRef="choice_list_52d29139" spirit:order="205">Megabytes</spirit:value>
     </spirit:parameter>
     <spirit:parameter>
       <spirit:name>Bar0_Size</spirit:name>
@@ -11422,7 +11419,7 @@
     </spirit:parameter>
     <spirit:parameter>
       <spirit:name>Device_ID</spirit:name>
-      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.Device_ID" spirit:order="302">7018</spirit:value>
+      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.Device_ID" spirit:order="302">7028</spirit:value>
     </spirit:parameter>
     <spirit:parameter>
       <spirit:name>Revision_ID</spirit:name>
@@ -11466,7 +11463,7 @@
     </spirit:parameter>
     <spirit:parameter>
       <spirit:name>Max_Payload_Size</spirit:name>
-      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.Max_Payload_Size" spirit:choiceRef="choice_pairs_3f2631bf" spirit:order="402">512_bytes</spirit:value>
+      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.Max_Payload_Size" spirit:choiceRef="choice_pairs_fb6cd8be" spirit:order="402">256_bytes</spirit:value>
     </spirit:parameter>
     <spirit:parameter>
       <spirit:name>Extended_Tag_Field</spirit:name>
@@ -11518,7 +11515,7 @@
     </spirit:parameter>
     <spirit:parameter>
       <spirit:name>Trgt_Link_Speed</spirit:name>
-      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.Trgt_Link_Speed" spirit:choiceRef="choice_pairs_067d6dc7" spirit:order="513">4&apos;h1</spirit:value>
+      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.Trgt_Link_Speed" spirit:choiceRef="choice_pairs_067d6dc7" spirit:order="513">4&apos;h2</spirit:value>
     </spirit:parameter>
     <spirit:parameter>
       <spirit:name>Hw_Auton_Spd_Disable</spirit:name>
@@ -12184,6 +12181,8 @@
       <xilinx:coreRevision>4</xilinx:coreRevision>
       <xilinx:configElementInfos>
         <xilinx:configElementInfo xilinx:referenceId="PARAM_VALUE.Acceptable_L1_Latency" xilinx:valueSource="user"/>
+        <xilinx:configElementInfo xilinx:referenceId="PARAM_VALUE.Bar0_Scale" xilinx:valueSource="user"/>
+        <xilinx:configElementInfo xilinx:referenceId="PARAM_VALUE.Bar0_Size" xilinx:valueSource="user"/>
         <xilinx:configElementInfo xilinx:referenceId="PARAM_VALUE.Bar0_Type" xilinx:valueSource="user"/>
         <xilinx:configElementInfo xilinx:referenceId="PARAM_VALUE.Bar1_Type" xilinx:valueSource="user"/>
         <xilinx:configElementInfo xilinx:referenceId="PARAM_VALUE.Bar2_Type" xilinx:valueSource="user"/>

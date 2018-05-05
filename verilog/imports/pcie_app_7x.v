@@ -137,7 +137,7 @@ module  pcie_app_7x#(
   output  [9:0]                 cfg_mgmt_dwaddr,
   output                        cfg_mgmt_wr_en,
   output                        cfg_mgmt_rd_en,
-  output                        cfg_mgmt_wr_readonly, 
+  output                        cfg_mgmt_wr_readonly,
   output                        cfg_interrupt,
   output                        cfg_interrupt_assert,
   output [7:0]                  cfg_interrupt_di,
@@ -218,7 +218,12 @@ module  pcie_app_7x#(
   assign s_axis_tx_tready_i = s_axis_tx_tready;
 
   //----------------------------------------------------------------------------------------------------------------//
+  wire rd_en;
+  reg [1024:0] rd_done;
 
+  always @ ( posedge user_clk ) begin
+      rd_done[0] <= rd_en;
+  end
   PIO  #(
 
     .C_DATA_WIDTH( C_DATA_WIDTH ),
@@ -234,6 +239,12 @@ module  pcie_app_7x#(
     .cfg_to_turnoff ( cfg_to_turnoff ),             // I
     .cfg_completer_id ( cfg_completer_id ),         // I [15:0]
     .cfg_turnoff_ok ( cfg_turnoff_ok ),             // O
+
+    .rd_en(rd_en),
+    .rd_done(rd_done[0]),
+    .rd_data(32'hCAFEBABE),
+    .wr_done(1'b1),
+
 
     .s_axis_tx_tready ( s_axis_tx_tready_i ),       // I
     .s_axis_tx_tdata  ( s_axis_tx_tdata ),          // O

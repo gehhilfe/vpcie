@@ -61,10 +61,10 @@ parameter                                  C_DATA_WIDTH = 64,
 parameter                                  REM_WIDTH = (C_DATA_WIDTH == 128) ? 2 : 1
 )
 (
-
+                     
                                            trn_rdst_rdy_n,
                                            trn_rnp_ok_n,
-
+              
                                            trn_rd,
                                            trn_rrem_n,
                                            trn_rsof_n,
@@ -73,11 +73,11 @@ parameter                                  REM_WIDTH = (C_DATA_WIDTH == 128) ? 2
                                            trn_rsrc_dsc_n,
                                            trn_rerrfwd_n,
                                            trn_rbar_hit_n,
-
+              
                                            trn_clk,
                                            trn_reset_n,
                                            trn_lnk_up_n
-
+              
                                            );
 
 output                                     trn_rdst_rdy_n;
@@ -135,9 +135,9 @@ always @(posedge trn_clk or negedge trn_reset_n) begin
   case (trn_rx_state)
 
     `TRN_RX_RESET :  begin
-
+      
       if (trn_reset_n == 1'b0)
-
+        
         trn_rx_state <= #(Tcq) `TRN_RX_RESET;
 
       else
@@ -152,7 +152,7 @@ always @(posedge trn_clk or negedge trn_reset_n) begin
         trn_rx_state <= #(Tcq) `TRN_RX_DOWN;
 
       else begin
-
+        
         trn_rx_state <= #(Tcq) `TRN_RX_IDLE;
       end
 
@@ -161,7 +161,7 @@ always @(posedge trn_clk or negedge trn_reset_n) begin
     `TRN_RX_IDLE : begin
 
       if (trn_reset_n == 1'b0)
-
+        
         trn_rx_state <= #(Tcq) `TRN_RX_RESET;
 
       else if (trn_lnk_up_n == 1'b1)
@@ -190,14 +190,14 @@ always @(posedge trn_clk or negedge trn_reset_n) begin
     `TRN_RX_ACTIVE : begin
 
       if (trn_reset_n == 1'b0)
-
+        
         trn_rx_state <= #(Tcq) `TRN_RX_RESET;
 
       else if (trn_lnk_up_n == 1'b1)
 
         trn_rx_state <= #(Tcq) `TRN_RX_DOWN;
 
-      else if (  (trn_rsrc_rdy_n == 1'b0) &&
+      else if (  (trn_rsrc_rdy_n == 1'b0) && 
                 (trn_reof_n == 1'b0) &&
                  (trn_rdst_rdy_n == 1'b0)  ) begin
 
@@ -251,7 +251,7 @@ always @(posedge trn_clk or negedge trn_reset_n) begin
    end
 
 end
-end
+end 
 else if (C_DATA_WIDTH == 128) begin : trn_rx_sm_128
 always @(posedge trn_clk or negedge trn_reset_n) begin
 
@@ -264,9 +264,9 @@ always @(posedge trn_clk or negedge trn_reset_n) begin
   case (trn_rx_state)
 
     `TRN_RX_RESET :  begin
-
+      
       if (trn_reset_n == 1'b0)
-
+        
         trn_rx_state <= #(Tcq) `TRN_RX_RESET;
 
       else
@@ -281,7 +281,7 @@ always @(posedge trn_clk or negedge trn_reset_n) begin
         trn_rx_state <= #(Tcq) `TRN_RX_DOWN;
 
       else begin
-
+        
         trn_rx_state <= #(Tcq) `TRN_RX_IDLE;
       end
 
@@ -290,7 +290,7 @@ always @(posedge trn_clk or negedge trn_reset_n) begin
     `TRN_RX_IDLE : begin
 
       if (trn_reset_n == 1'b0)
-
+        
         trn_rx_state <= #(Tcq) `TRN_RX_RESET;
 
       else if (trn_lnk_up_n == 1'b1)
@@ -328,14 +328,14 @@ always @(posedge trn_clk or negedge trn_reset_n) begin
     `TRN_RX_ACTIVE : begin
 
       if (trn_reset_n == 1'b0)
-
+        
         trn_rx_state <= #(Tcq) `TRN_RX_RESET;
 
       else if (trn_lnk_up_n == 1'b1)
 
         trn_rx_state <= #(Tcq) `TRN_RX_DOWN;
 
-      else if (  (trn_rsrc_rdy_n == 1'b0) &&
+      else if (  (trn_rsrc_rdy_n == 1'b0) && 
                  (trn_rdst_rdy_n == 1'b0)  ) begin
 
         case ({trn_rsof_n, trn_reof_n})
@@ -423,23 +423,23 @@ always @(posedge trn_clk or negedge trn_reset_n) begin
     end else begin
 
         //trn_rnp_ok_toggle_count   <=  #(Tcq)     trn_rnp_ok_toggle_count - 1;
-
-    end
+                
+    end         
 
     if (trn_rdst_rdy_toggle_count == 0) begin
 
         //trn_rdst_rdy_n      <= #(Tcq)       !trn_rdst_rdy_n;
         trn_rdst_rdy_toggle_count <= #(Tcq) $random;
-
+                
     end else begin
 
         //trn_rdst_rdy_toggle_count <= trn_rdst_rdy_toggle_count - 1;
     end
-
+        
    end
-
+            
 end
-
+                
 reg [31:0] sim_timeout;
 initial
 begin
@@ -447,18 +447,18 @@ begin
 end
 
 /* Transaction Receive Timeout */
-
+            
 always @(trn_clk or trn_rsof_n or trn_rsrc_rdy_n) begin
-/*
-    if (next_trn_rx_timeout == 0) begin
-        if(!`EXPECT_FINISH_CHECK)
-          $display("[%t] : TEST FAILED --- Haven't Received All Expected TLPs", $realtime);
-
-        $finish(2);
-    end
-
+                
+    //if (next_trn_rx_timeout == 0) begin
+    //    if(!`EXPECT_FINISH_CHECK)
+    //      $display("[%t] : TEST FAILED --- Haven't Received All Expected TLPs", $realtime);
+//
+//        $finish(2);
+//    end
+                
     if ((trn_rsof_n == 1'b0) && (trn_rsrc_rdy_n == 1'b0)) begin
-
+            
         next_trn_rx_timeout = sim_timeout;
 
     end else begin
@@ -468,7 +468,8 @@ always @(trn_clk or trn_rsof_n or trn_rsrc_rdy_n) begin
             next_trn_rx_timeout = next_trn_rx_timeout - 1'b1;
 
     end
-*/
+
 end
 
 endmodule // pci_exp_usrapp_rx
+

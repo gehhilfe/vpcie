@@ -60,11 +60,9 @@ vlog -64 -incr -work xil_defaultlib  "+incdir+imports"  "+incdir+xilinx-pcie-axi
 "pcie_7x_0_ex.srcs/sources_1/ip/pcie_7x_0/source/pcie_7x_0_pcie2_top.v" \
 "pcie_7x_0_ex.srcs/sources_1/ip/pcie_7x_0/sim/pcie_7x_0.v" \
 "imports/EP_MEM.v" \
-"imports/PIO.v" \
 "imports/PIO_EP.v" \
 "imports/PIO_EP_MEM_ACCESS.v" \
 "imports/PIO_RX_ENGINE.v" \
-"imports/PIO_TO_CTRL.v" \
 "imports/PIO_TX_ENGINE.v" \
 "imports/pci_exp_usrapp_cfg.v" \
 "imports/pci_exp_usrapp_com.v" \

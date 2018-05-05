@@ -51,7 +51,7 @@
 // File       : pipe_interconnect.vh
 // Version    : 3.3
 
-`define EP  board.EP.pcie_7x_0_support_i.pcie_7x_0_i.inst.inst.pcie_top_i
+`define EP board.EP.pcie_7x_0_support_i.pcie_7x_0_i.inst.inst.pcie_top_i
 `define RP board.RP.rport.pcie_top_i
 
 //----------------------------------------------------------  PIO RTL & RP simulation  -------------------------------------------------------------------//  

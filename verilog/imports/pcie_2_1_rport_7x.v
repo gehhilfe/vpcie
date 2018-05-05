@@ -62,7 +62,7 @@
 (* DowngradeIPIdentifiedWarnings = "yes" *)
 module pcie_2_1_rport_7x # (
     parameter        CFG_VEND_ID = 16'h10ee,
-    parameter        CFG_DEV_ID = 16'h7118,
+    parameter        CFG_DEV_ID = 16'h7128,
     parameter        CFG_REV_ID =  8'h00,
     parameter        CFG_SUBSYS_VEND_ID = 16'h10ee,
     parameter        CFG_SUBSYS_ID = 16'h0007,

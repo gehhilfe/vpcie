@@ -1,7 +1,7 @@
 // Copyright 1986-2017 Xilinx, Inc. All Rights Reserved.
 // --------------------------------------------------------------------------------
 // Tool Version: Vivado v.2017.2 (lin64) Build 1909853 Thu Jun 15 18:39:10 MDT 2017
-// Date        : Wed Apr 11 10:00:14 2018
+// Date        : Sat May  5 12:36:55 2018
 // Host        : timb-linux running 64-bit Ubuntu 16.04.4 LTS
 // Command     : write_verilog -force -mode synth_stub
 //               /home/timb/pcie_test/pcie_test.srcs/sources_1/ip/pcie_7x_0/pcie_7x_0_stub.v

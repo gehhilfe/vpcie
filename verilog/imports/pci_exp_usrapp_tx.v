@@ -284,7 +284,7 @@ initial begin
         BAR_INIT_P_IO_START      =   33'h00000_0000; // start of 32bit io
 
 
-        DEV_VEN_ID = (32'h7018 << 16) | (32'h10EE);
+        DEV_VEN_ID = (32'h7028 << 16) | (32'h10EE);
         PIO_MAX_MEMORY = 8192; // PIO has max of 8Kbytes of memory
         PIO_MAX_NUM_BLOCK_RAMS = 4; // PIO has four block RAMS to test
 
@@ -494,13 +494,13 @@ end
     TSK_WAIT_FOR_READ_DATA;
 
     if  (P_READ_DATA[19:16] == LINK_CAP_MAX_LINK_SPEED) begin
-       if (P_READ_DATA[19:16] == 1)
+       if (P_READ_DATA[19:16] == 2)
           $display("[%t] :    Check Max Link Speed = 2.5GT/s - PASSED", $realtime);
        else
           $display("[%t] :    Check Max Link Speed = 5.0GT/s - PASSED", $realtime);
     end else begin
           $display("[%t] :    Check Max Link Speed - FAILED", $realtime);
-          $display("[%t] : Data Error Mismatch, Parameter Data %s != Read Data %x", $realtime, "1", P_READ_DATA[19:16]);
+          $display("[%t] : Data Error Mismatch, Parameter Data %s != Read Data %x", $realtime, "2", P_READ_DATA[19:16]);
     end
 
 
@@ -514,9 +514,9 @@ end
     TSK_TX_TYPE0_CONFIGURATION_READ(DEFAULT_TAG, 12'h0, 4'hF);
     TSK_WAIT_FOR_READ_DATA;
 
-    if  (P_READ_DATA[31:16] != 16'h7018) begin
+    if  (P_READ_DATA[31:16] != 16'h7028) begin
         $display("[%t] :    Check Device/Vendor ID - FAILED", $realtime);
-        $display("[%t] : Data Error Mismatch, Parameter Data %x != Read Data %x", $realtime, 16'h7018, P_READ_DATA);
+        $display("[%t] : Data Error Mismatch, Parameter Data %x != Read Data %x", $realtime, 16'h7028, P_READ_DATA);
         error_check = 1;
     end else begin
         $display("[%t] :    Check Device/Vendor ID - PASSED", $realtime);
@@ -529,9 +529,9 @@ end
     TSK_TX_TYPE0_CONFIGURATION_READ(DEFAULT_TAG, 12'h64, 4'hF);
     TSK_WAIT_FOR_READ_DATA;
 
-   if (P_READ_DATA[2:0] != 3'd2) begin
+   if (P_READ_DATA[2:0] != 3'd1) begin
         $display("[%t] :    Check CMPS ID - FAILED", $realtime);
-        $display("[%t] : Data Error Mismatch, Parameter Data %x != Read data %x", $realtime, 3'h2, P_READ_DATA);
+        $display("[%t] : Data Error Mismatch, Parameter Data %x != Read data %x", $realtime, 3'h1, P_READ_DATA);
       error_check = 1;
    end else begin
         $display("[%t] :    Check CMPS ID - PASSED", $realtime);
