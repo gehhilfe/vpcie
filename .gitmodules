@@ -1,3 +1,11 @@
 [submodule "verilog/xilinx-pcie-axi-dma"]
 	path = verilog/xilinx-pcie-axi-dma
 	url = git@github.com:Gehhilfe/xilinx-pcie-axi-dma.git
+[submodule "verilog/dma_axi_pcie_app_ip"]
+	path = verilog/dma_axi_pcie_app_ip
+	url = git@stimi.ovh:dma_axi_pcie_app_ip
+	branch = master
+[submodule "verilog/pcie_registers_ip"]
+	path = verilog/pcie_registers_ip
+	url = git@stimi.ovh:pcie_registers_ip
+	branch = master
