@@ -173,6 +173,18 @@ module xilinx_pcie_2_1_ep_7x # (
   wire                                        sys_rst_n_c;
   wire                                        sys_clk;
 
+  wire [31:0]            rd_addr;
+  wire [7:0]             rd_be;
+  wire [31:0]            rd_data;
+  wire                   rd_en;
+  wire                   rd_done;
+  
+  wire [31:0]            wr_addr;
+  wire [7:0]             wr_be;
+  wire [31:0]            wr_data;
+  wire                   wr_en;
+  wire                   wr_done;
+
 
 // Register Declaration
 
@@ -582,8 +594,37 @@ pcie_app_7x  #(
   .cfg_interrupt_assert           ( cfg_interrupt_assert ),
   .cfg_interrupt_di               ( cfg_interrupt_di ),
   .cfg_interrupt_stat             ( cfg_interrupt_stat ),
-  .cfg_pciecap_interrupt_msgnum   ( cfg_pciecap_interrupt_msgnum )
+  .cfg_pciecap_interrupt_msgnum   ( cfg_pciecap_interrupt_msgnum ),
+
+  .rd_addr(rd_addr),
+  .rd_be(rd_be),
+  .rd_data(rd_data),
+  .rd_en(rd_en),
+  .rd_done(rd_done),
+
+  .wr_addr(wr_addr),
+  .wr_be(wr_be),
+  .wr_data(wr_data),
+  .wr_en(wr_en),
+  .wr_done(wr_done)
 
 );
+
+  pcie_registers registers_core (
+      .i_clk ( user_clk ),                         // I
+      .i_rst ( user_reset_q ), 
+      
+      .rd_addr(rd_addr),
+      .rd_be(rd_be),
+      .rd_data(rd_data),
+      .rd_en(rd_en),
+      .rd_done(rd_done),
+      
+      .wr_addr(wr_addr),
+      .wr_be(wr_be),
+      .wr_data(wr_data),
+      .wr_en(wr_en),
+      .wr_done(wr_done)    
+    );
 
 endmodule

@@ -60,11 +60,9 @@ vlog -64 -incr -work xil_defaultlib  "+incdir+imports"  "+incdir+xilinx-pcie-axi
 "pcie_7x_0_ex.srcs/sources_1/ip/pcie_7x_0/source/pcie_7x_0_pcie2_top.v" \
 "pcie_7x_0_ex.srcs/sources_1/ip/pcie_7x_0/sim/pcie_7x_0.v" \
 "imports/EP_MEM.v" \
-"imports/PIO.v" \
 "imports/PIO_EP.v" \
 "imports/PIO_EP_MEM_ACCESS.v" \
 "imports/PIO_RX_ENGINE.v" \
-"imports/PIO_TO_CTRL.v" \
 "imports/PIO_TX_ENGINE.v" \
 "imports/pci_exp_usrapp_cfg.v" \
 "imports/pci_exp_usrapp_com.v" \
@@ -75,7 +73,6 @@ vlog -64 -incr -work xil_defaultlib  "+incdir+imports"  "+incdir+xilinx-pcie-axi
 "imports/pcie_7x_0_gt_top_pipe_mode.v" \
 "imports/pcie_7x_0_pipe_clock.v" \
 "imports/pcie_7x_0_support.v" \
-"imports/pcie_app_7x.v" \
 "imports/pcie_axi_trn_bridge.v" \
 "imports/sys_clk_gen.v" \
 "imports/sys_clk_gen_ds.v" \
@@ -86,6 +83,7 @@ vlog -64 -incr -work xil_defaultlib  "+incdir+imports"  "+incdir+xilinx-pcie-axi
 # compile glbl module
 vlog -work xil_defaultlib "glbl.v"
 
+vlog -sv bram.sv
 
 vsim -pli ../cmake-build-debug/libvpi.so -t 1ps -voptargs="+acc" -L xil_defaultlib -L xpm -L unisims_ver -L unimacro_ver -L secureip -lib xil_defaultlib xil_defaultlib.board xil_defaultlib.glbl
 

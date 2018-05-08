@@ -232,7 +232,6 @@ module  pcie_app_7x#(
     .user_lnk_up ( user_lnk_up ),                   // I
 
     .cfg_to_turnoff ( cfg_to_turnoff ),             // I
-    .cfg_completer_id ( cfg_completer_id ),         // I [15:0]
     .cfg_turnoff_ok ( cfg_turnoff_ok ),             // O
 
     .s_axis_tx_tready ( s_axis_tx_tready_i ),       // I
