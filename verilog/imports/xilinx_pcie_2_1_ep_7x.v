@@ -610,6 +610,13 @@ pcie_app_7x  #(
 
 );
 
+  wire          bram_rst;
+  wire [14:0]   bram_addr;
+  wire          bram_en;
+  wire          bram_we;
+  wire [31:0]   bram_din;
+  wire [31:0]   bram_dout;
+
   pcie_registers registers_core (
       .i_clk ( user_clk ),                         // I
       .i_rst ( user_reset_q ), 
@@ -624,7 +631,23 @@ pcie_app_7x  #(
       .wr_be(wr_be),
       .wr_data(wr_data),
       .wr_en(wr_en),
-      .wr_done(wr_done)    
+      .wr_done(wr_done),
+
+
+      //BRAM Interface
+      .bram_rst(bram_rst),
+      .bram_addr(bram_addr),
+      .bram_en(bram_en),
+      .bram_we(bram_we),
+      .bram_din(bram_dout),
+      .bram_dout(bram_din) 
     );
+
+  sv_bram configuration_memory (
+    user_clk, bram_en, bram_rst, bram_we,
+    bram_addr,
+    bram_din,
+    bram_dout
+  );
 
 endmodule

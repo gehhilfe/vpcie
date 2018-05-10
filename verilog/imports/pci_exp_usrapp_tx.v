@@ -1192,7 +1192,7 @@ end
         input    [9:0]    len_;
         input    [2:0]    comp_status_;
         begin
-
+            $display("[%t] : TSK_TX_COMPLETION", $realtime);
             if (trn_lnk_up_n) begin
 
                 $display("[%t] : Trn interface is MIA", $realtime);
@@ -1257,6 +1257,7 @@ end
         reg    [10:0]    _len;
         integer        _j;
         begin
+            $display("[%t] : TSK_TX_COMPLETION_DATA", $realtime);
             if (len_ == 0)
 
                 _len = 1024;

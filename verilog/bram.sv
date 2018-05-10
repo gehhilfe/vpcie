@@ -17,13 +17,13 @@ initial begin
 	end
 end
 
-task automatic read;
+task read;
 	input [p_addr_bits-1:0] in_addr;
 	//repeat(p_read_latency) @posedge(clk)
 	d_out = data[in_addr];
 endtask
 
-task automatic write;
+task write;
 	input [p_addr_bits-1:0] in_addr;
 	data[in_addr] = d_in;
 endtask
@@ -34,14 +34,10 @@ always @(posedge clk) begin
 	end
 	else begin
 		if(en && !wren) begin
-			fork
-				read(addr);
-			join_none
+			read(addr);
 		end
 		if(en && wren) begin
-			fork
-				write(addr);
-			join_none
+			write(addr);
 		end
 	end
 end
