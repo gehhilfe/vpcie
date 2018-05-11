@@ -364,6 +364,11 @@ end
 
     TSK_SYSTEM_INITIALIZATION;
     TSK_BAR_INIT;
+
+    board.RP.cfg_usrapp.TSK_READ_CFG_DW(32'h00000001);
+    board.RP.cfg_usrapp.TSK_WRITE_CFG_DW(32'h00000001, 32'h00000007, 4'b1110);
+    board.RP.cfg_usrapp.TSK_READ_CFG_DW(32'h00000001);
+
     system_ready <= 1;
   end
 
