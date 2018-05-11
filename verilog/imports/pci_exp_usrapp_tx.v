@@ -364,6 +364,11 @@ end
 
     TSK_SYSTEM_INITIALIZATION;
     TSK_BAR_INIT;
+
+    board.RP.cfg_usrapp.TSK_READ_CFG_DW(32'h00000001);
+    board.RP.cfg_usrapp.TSK_WRITE_CFG_DW(32'h00000001, 32'h00000007, 4'b1110);
+    board.RP.cfg_usrapp.TSK_READ_CFG_DW(32'h00000001);
+
     system_ready <= 1;
   end
 
@@ -426,7 +431,7 @@ end
             DATA_STORE[3] = (vpcie_word_data>>24) & 8'hFF;
             TSK_TX_MEMORY_WRITE_32(DEFAULT_TAG,
                 DEFAULT_TC, 10'd1,
-                vpcie_header_addr+8'h10, 4'h0, 4'hF, 1'b0);
+                vpcie_header_addr, 4'h0, 4'hF, 1'b0);
             TSK_TX_CLK_EAT(10);
             DEFAULT_TAG = DEFAULT_TAG + 1;
             vp_state_next = lp_state_idle;
@@ -434,7 +439,7 @@ end
         lp_state_handle_read_mem: begin
             TSK_TX_MEMORY_READ_32(DEFAULT_TAG,
                 DEFAULT_TC, 10'd1,
-                vpcie_header_addr+8'h10, 4'h0, 4'hF);
+                vpcie_header_addr, 4'h0, 4'hF);
             TSK_WAIT_FOR_READ_DATA;
             $vpcieSendMemReadResponse(P_READ_DATA);
             DEFAULT_TAG = DEFAULT_TAG + 1;
@@ -1192,7 +1197,7 @@ end
         input    [9:0]    len_;
         input    [2:0]    comp_status_;
         begin
-
+            $display("[%t] : TSK_TX_COMPLETION", $realtime);
             if (trn_lnk_up_n) begin
 
                 $display("[%t] : Trn interface is MIA", $realtime);
@@ -1257,6 +1262,7 @@ end
         reg    [10:0]    _len;
         integer        _j;
         begin
+            $display("[%t] : TSK_TX_COMPLETION_DATA", $realtime);
             if (len_ == 0)
 
                 _len = 1024;

@@ -21,6 +21,7 @@ vlog -64 -incr -work xil_defaultlib vpcieHeader.v
 do "xilinx-pcie-axi-dma/compile.do"
 
 vlog -64 -incr -work xil_defaultlib  "+incdir+imports"  "+incdir+xilinx-pcie-axi-dma"\
+"bram.sv" \
 "pcie_7x_0_ex.srcs/sources_1/ip/pcie_7x_0/source/pcie_7x_0_pipe_eq.v" \
 "pcie_7x_0_ex.srcs/sources_1/ip/pcie_7x_0/source/pcie_7x_0_pipe_drp.v" \
 "pcie_7x_0_ex.srcs/sources_1/ip/pcie_7x_0/source/pcie_7x_0_pipe_rate.v" \
@@ -73,7 +74,6 @@ vlog -64 -incr -work xil_defaultlib  "+incdir+imports"  "+incdir+xilinx-pcie-axi
 "imports/pcie_7x_0_gt_top_pipe_mode.v" \
 "imports/pcie_7x_0_pipe_clock.v" \
 "imports/pcie_7x_0_support.v" \
-"imports/pcie_app_7x.v" \
 "imports/pcie_axi_trn_bridge.v" \
 "imports/sys_clk_gen.v" \
 "imports/sys_clk_gen_ds.v" \
@@ -84,7 +84,6 @@ vlog -64 -incr -work xil_defaultlib  "+incdir+imports"  "+incdir+xilinx-pcie-axi
 # compile glbl module
 vlog -work xil_defaultlib "glbl.v"
 
-
 vsim -pli ../cmake-build-debug/libvpi.so -t 1ps -voptargs="+acc" -L xil_defaultlib -L xpm -L unisims_ver -L unimacro_ver -L secureip -lib xil_defaultlib xil_defaultlib.board xil_defaultlib.glbl
 
 view wave
@@ -93,9 +92,11 @@ add wave -position end -group VPCIE-Status sim:/board/RP/vpcie_status_inst/*
 add wave -position end -group VPCIE-Header sim:/board/RP/vpcie_header_inst/*
 add wave -position end -group tx_usrapp sim:/board/RP/tx_usrapp/*
 add wave -position end -group rx_usrapp sim:/board/RP/rx_usrapp/*
-add wave -position end -group pcie-core sim:/board/EP/pcie_7x_0_support_i/*
+add wave -position end -group pcie-core sim:/board/EP/pcie_7x_0_support_i/pcie_7x_0_i/*
+add wave -position end -group Bridge sim:/board/RP/pcie_axi_trn_bridge_i/*
 add wave -position end -group PIO-s sim:/board/EP/app/PIO/s*
 add wave -position end -group PIO-m sim:/board/EP/app/PIO/m*
+add wave -position end -group PIO sim:/board/EP/app/PIO/*
 
 do "xilinx-pcie-axi-dma/wave.do"
 

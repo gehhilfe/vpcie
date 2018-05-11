@@ -442,6 +442,9 @@ end
       address_low = (address_low << 8) | (txrx ? frame_store_tx[9] : frame_store_rx[9]);
       address_low = (address_low << 8) | (txrx ? frame_store_tx[10] : frame_store_rx[10]);
       address_low = (address_low << 8) | (txrx ? frame_store_tx[11] : frame_store_rx[11]);
+
+      $display("Sending dma request to VPICE");
+
       $fdisplay(_log_file_ptr, "\t Requester Id: 0x%h", requester_id);
       $fdisplay(_log_file_ptr, "\t Tag: 0x%h", tag);
       $fdisplay(_log_file_ptr, "\t Last and First Byte Enables: 0x%h", byte_enables);

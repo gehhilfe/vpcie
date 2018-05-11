@@ -93,12 +93,15 @@ module PIO #(
 
   input                         cfg_to_turnoff,
   output                        cfg_turnoff_ok,
-
-  input [15:0]                  cfg_completer_id
+  input   [7:0]                 cfg_bus_number,
+  input   [4:0]                 cfg_device_number,
+  input   [2:0]                 cfg_function_number
 
 ); // synthesis syn_hier = "hard"
 
   // Local wires
+
+  wire [15:0] cfg_completer_id      = { cfg_bus_number, cfg_device_number, cfg_function_number };
 
   wire          req_compl;
   wire          compl_done;
