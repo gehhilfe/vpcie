@@ -148,6 +148,7 @@ module xilinx_pcie_2_1_ep_7x # (
   wire   [7:0]                                cfg_interrupt_di;
   wire                                        cfg_interrupt_stat;
   wire   [4:0]                                cfg_pciecap_interrupt_msgnum;
+  wire   [15:0]                               cfg_dcommand;
 
   wire                                        cfg_to_turnoff;
   wire   [7:0]                                cfg_bus_number;
@@ -189,6 +190,7 @@ module xilinx_pcie_2_1_ep_7x # (
   wire [31:0]            dma_read_addr;
   wire [9:0]             dma_read_len;
   wire                   dma_read_valid;
+  wire                   dma_read_done;
   wire [7:0]             current_tag;
 
 
@@ -392,7 +394,7 @@ pcie_7x_0_support_i
   .cfg_dstatus                               ( ),
   .cfg_lstatus                               ( ),
   .cfg_pcie_link_state                       ( ),
-  .cfg_dcommand                              ( ),
+  .cfg_dcommand                              ( cfg_dcommand ),
   .cfg_lcommand                              ( ),
   .cfg_dcommand2                             ( ),
 
@@ -498,6 +500,14 @@ pcie_7x_0_support_i
   .sys_rst_n                                  ( sys_rst_n_c )
 
 );
+
+
+
+wire [7:0]             app_packer_tag;
+wire [127:0]           app_packer_dout;
+wire [3:0]             app_packer_dout_dwen;
+wire                   app_packer_valid;
+wire                   app_packer_done;
 
 
 pcie_app_7x  #(
@@ -624,7 +634,15 @@ pcie_app_7x  #(
   .dma_read_addr(dma_read_addr),
   .dma_read_len(dma_read_len),
   .dma_read_valid(dma_read_valid),
-  .current_tag(current_tag)
+  .dma_read_done(dma_read_done),
+  .current_tag(current_tag),
+
+
+  .packer_tag(app_packer_tag),
+  .packer_dout(app_packer_dout),
+  .packer_dout_dwen(app_packer_dout_dwen),
+  .packer_valid(app_packer_valid),
+  .packer_done(app_packer_done)
 
 );
 
@@ -634,6 +652,13 @@ pcie_app_7x  #(
   wire          bram_we;
   wire [31:0]   bram_din;
   wire [31:0]   bram_dout;
+
+  // DMA Read Channel
+  wire [31:0]   registers_dma_read_host_address;
+  wire [31:0]   registers_dma_read_device_address;
+  wire [31:0]   registers_dma_read_length;
+  wire          registers_dma_read_start;
+
 
   pcie_registers registers_core (
       .i_clk ( user_clk ),                         // I
@@ -652,6 +677,12 @@ pcie_app_7x  #(
       .wr_done(wr_done),
 
 
+      // DMA Read Channel
+      .dma_read_host_address(registers_dma_read_host_address),
+      .dma_read_device_address(registers_dma_read_device_address),
+      .dma_read_length(registers_dma_read_length),
+      .dma_read_start(registers_dma_read_start),
+
       //BRAM Interface
       .bram_rst(bram_rst),
       .bram_addr(bram_addr),
@@ -660,6 +691,34 @@ pcie_app_7x  #(
       .bram_din(bram_dout),
       .bram_dout(bram_din) 
     );
+
+
+  dma_read_controller dma_read_controller(
+      .i_clk ( user_clk ),
+      .i_rst ( user_reset_q ),
+
+      .pcie_dcommand(cfg_dcommand),
+
+      .dma_read_host_address(registers_dma_read_host_address),
+      .dma_read_device_address(registers_dma_read_device_address),
+      .dma_read_length(registers_dma_read_length),
+      .dma_read_start(registers_dma_read_start),
+
+
+      // Packer
+      .packer_tag(app_packer_tag),
+      .packer_dout(app_packer_dout),
+      .packer_dout_dwen(app_packer_dout_dwen),
+      .packer_valid(app_packer_valid),
+      .packer_done(app_packer_done),
+
+      // DMA Read Request
+      .dma_read_addr(dma_read_addr),
+      .dma_read_len(dma_read_len),
+      .dma_read_valid(dma_read_valid),
+      .dma_read_done(dma_read_done),
+      .current_tag(current_tag)
+  );
 
   sv_bram configuration_memory (
     user_clk, bram_en, bram_rst, bram_we,
