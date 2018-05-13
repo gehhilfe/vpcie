@@ -11,6 +11,7 @@
 
 typedef struct pcie_net_header {
     uint16_t size;
+    uint8_t type;
 } __attribute__((packed)) pcie_net_header_t;
 
 typedef struct pcie_net_msg {
@@ -28,6 +29,7 @@ typedef struct pcie_net_msg {
 #define PCIE_NET_OP_INT 6
 #define PCIE_NET_OP_MSI 7
 #define PCIE_NET_OP_MSIX 8
+#define PCIE_NET_OP_READ_DMA 9
 
     uint8_t op; /* in PCIE_NET_OP_XXX */
     uint8_t bar; /* in [0:5] */
@@ -41,8 +43,11 @@ typedef struct pcie_net_msg {
 typedef struct pcie_net_reply {
     pcie_net_header_t header;
     uint8_t status;
+    uint16_t size;
     uint8_t data[8];
 } __attribute__((packed)) pcie_net_reply_t;
+
+#define PCIE_NET_REPLAY_MAX_SIZE (offsetof(pcie_net_reply_t, data) + 0x1000)
 
 struct pcie_net;
 
@@ -86,13 +91,16 @@ ssize_t pcie_net_send_buf(pcie_net_t *, const void *, size_t);
 
 static inline int pcie_net_send_msg(pcie_net_t *n, pcie_net_msg_t *m) {
     const size_t size = offsetof(pcie_net_msg_t, data) + m->size;
-    m->header.size = size;
+    m->header.size = (uint16_t) size;
+    m->header.type = 0;
     return pcie_net_send_buf(n, (const void *) m, size);
 }
 
 static inline int pcie_net_send_reply(pcie_net_t *n, pcie_net_reply_t *r) {
-    r->header.size = sizeof(*r);
-    return pcie_net_send_buf(n, (const void *) r, sizeof(*r));
+    const size_t size = offsetof(pcie_net_reply_t, data) + r->size;
+    r->header.size = (uint16_t) size;
+    r->header.type = 1;
+    return pcie_net_send_buf(n, (const void *) r, size);
 }
 
 ssize_t pcie_net_recv_buf(pcie_net_t *, void *, size_t);
@@ -108,7 +116,7 @@ static inline int pcie_net_recv_msg(pcie_net_t *net, pcie_net_msg_t *m) {
 __attribute__((unused))
 static inline int pcie_net_recv_reply(pcie_net_t *net, pcie_net_reply_t *r) {
     /* -1 for error, 0 for success, 1 for neither a message, nor an error */
-    const ssize_t n = pcie_net_recv_buf(net, r, sizeof(*r));
+    const ssize_t n = pcie_net_recv_buf(net, r, PCIE_NET_REPLAY_MAX_SIZE);
     if (n < 0) return -1;
     else if (n == 0) return 1;
     return 0;

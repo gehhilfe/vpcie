@@ -8,6 +8,7 @@
 #include <semaphore.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #include "../net/vpcienet.h"
 
 #define VPIERROR() vpi_printf("[!] %s %d\n", __FUNCTION__, __LINE__)
@@ -21,7 +22,10 @@ struct {
 
     vpiHandle word_data;
     vpiHandle new_msg;
+    vpiHandle data_out;
+
     bool isSet;
+    uint8_t payload_data[4096];
 } headerModule;
 
 struct {
@@ -29,6 +33,12 @@ struct {
     vpiHandle connected;
     bool isSet;
 } statusModule;
+
+struct {
+    vpiHandle address;
+    vpiHandle size;
+    vpiHandle dir_write;
+};
 
 struct {
     volatile bool running;
@@ -95,10 +105,12 @@ int setHeader(char *userdata) {
     headerModule.size = obtainSubHandle("size", module);
     headerModule.new_msg = obtainSubHandle("new_msg", module);
     headerModule.word_data = obtainSubHandle("word_data", module);
+    headerModule.data_out = obtainSubHandle("data_out", module);
 
     setIntValue(headerModule.op, 0);
     setIntValue(headerModule.new_msg, 0);
     setIntValue(headerModule.word_data, 0);
+    setIntValue(headerModule.data_out, 0);
 
     headerModule.isSet = true;
 
@@ -185,9 +197,9 @@ void *network_main(void *data) {
 //        if(pcie_net->task_fn != NULL)
 //            tm = &pcie_net->task_tm;
 
-        if (getIntValue(headerModule.new_msg)) {
+        /*if (getIntValue(headerModule.new_msg)) {
             setIntValue(headerModule.new_msg, 0);
-        }
+        }*/
 
         int freeTokens = 0;
         sem_getvalue(&vpcie_msg_token, &freeTokens);
@@ -308,9 +320,13 @@ int sendMemReadResponse(char *userData) {
     uint32_t data = (uint32_t) getIntValue(argHandle);
 
     vpi_printf("VPCIE: Mem Read Response %x\n", data);
-    pcie_net_reply_t reply;
-    *(uint32_t *)reply.data = data;
-    pcie_net_send_reply(pcie_net, &reply);
+    pcie_net_reply_t *reply = calloc(1, PCIE_NET_REPLAY_MAX_SIZE);
+    *(uint32_t *)reply->data = data;
+    reply->size = 4;
+    pcie_net_send_reply(pcie_net, reply);
+    free(reply);
+
+    vpi_free_object(args_iter);
 }
 
 int sendConfigReadResponse(char *userData) {
@@ -324,9 +340,70 @@ int sendConfigReadResponse(char *userData) {
 
     vpi_printf("VPCIE: Config Read Response %x\n", data);
 
-    pcie_net_reply_t reply;
-    *(uint32_t *)reply.data = data;
-    pcie_net_send_reply(pcie_net, &reply);
+    pcie_net_reply_t *reply = calloc(1, PCIE_NET_REPLAY_MAX_SIZE);
+    *(uint32_t *)reply->data = data;
+    reply->size = 4;
+    pcie_net_send_reply(pcie_net, reply);
+    free(reply);
+
+    vpi_free_object(args_iter);
+}
+
+int sendDmaReadRequest(char *userData) {
+    // Obtain a handle to the argument list
+    vpiHandle systfref = vpi_handle(vpiSysTfCall, NULL);
+    vpiHandle args_iter = vpi_iterate(vpiArgument, systfref);
+
+    // Grab the value of the first argument
+    vpiHandle argHandle = vpi_scan(args_iter);
+    uint32_t address = (uint32_t) getIntValue(argHandle);
+    argHandle = vpi_scan(args_iter);
+    uint32_t length = (uint32_t) getIntValue(argHandle);
+
+    struct pcie_net_msg *msg = calloc(1, PCIE_NET_MSG_MAX_SIZE);
+    uint32_t *data = (uint32_t *) msg->data;
+    msg->op = PCIE_NET_OP_READ_DMA;
+    msg->width = 4;
+    msg->addr = address;
+    msg->size = 4;
+    data[0] = length;
+
+    sem_post(&vpcie_tick_semaphore_start);
+    sem_wait(&vpcie_tick_semaphore_stop);
+
+    pcie_net_send_msg(pcie_net, msg);
+
+    pcie_net_reply_t *reply = calloc(1, PCIE_NET_REPLAY_MAX_SIZE);
+
+    pcie_net_recv_reply(pcie_net, reply);
+
+
+    vpi_printf("VPCIE: Got DMA Replay with length %d bytes\n", reply->size);
+
+    memcpy(headerModule.payload_data, reply->data, reply->size);
+
+    setIntValue(headerModule.op, PCIE_NET_OP_READ_DMA);
+    setIntValue(headerModule.size, reply->size);
+    setIntValue(headerModule.new_msg, 1);
+
+    free(msg);
+    free(reply);
+
+    vpi_free_object(args_iter);
+}
+
+char getPayloadData(char *userData) {
+    // Obtain a handle to the argument list
+    vpiHandle systfref = vpi_handle(vpiSysTfCall, NULL);
+    vpiHandle args_iter = vpi_iterate(vpiArgument, systfref);
+
+    // Grab the value of the first argument
+    vpiHandle argHandle = vpi_scan(args_iter);
+    uint32_t offset = (uint32_t) getIntValue(argHandle);
+    //vpi_printf("VPCIE: Setting data_out to 0x%x bytes\n", headerModule.payload_data[offset]);
+    setIntValue(headerModule.data_out, headerModule.payload_data[offset]);
+
+    vpi_free_object(args_iter);
 }
 
 void registerFunctions() {
@@ -339,6 +416,8 @@ void registerFunctions() {
     s_vpi_systf_data readDataData = {vpiSysTask, 0, "$vpcieReadData", readData, 0, 0, 0};
     s_vpi_systf_data sendConfigReadResponseData = {vpiSysTask, 0, "$vpcieSendConfigResponse", sendConfigReadResponse, 0, 0, 0};
     s_vpi_systf_data sendMemReadResponseData = {vpiSysTask, 0, "$vpcieSendMemReadResponse", sendMemReadResponse, 0, 0, 0};
+    s_vpi_systf_data sendDmaReadRequestData = {vpiSysTask, 0, "$vpcieSendDmaReadRequest", sendDmaReadRequest, 0, 0, 0};
+    s_vpi_systf_data getPayloadDataData = {vpiSysTask, 0, "$getPayloadData", getPayloadData, 0,0,0 };
     headerModule.isSet = false;
     statusModule.isSet = false;
     vpi_register_systf(&setHeaderData);
@@ -350,6 +429,8 @@ void registerFunctions() {
     vpi_register_systf(&readDataData);
     vpi_register_systf(&sendConfigReadResponseData);
     vpi_register_systf(&sendMemReadResponseData);
+    vpi_register_systf(&sendDmaReadRequestData);
+    vpi_register_systf(&getPayloadDataData);
 }
 
 void (*vlog_startup_routines[])() = {

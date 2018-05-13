@@ -186,6 +186,12 @@ module xilinx_pcie_2_1_ep_7x # (
   wire                   wr_done;
 
 
+  wire [31:0]            dma_read_addr;
+  wire [9:0]             dma_read_len;
+  wire                   dma_read_valid;
+  wire [7:0]             current_tag;
+
+
 // Register Declaration
 
   reg                                         user_reset_q;
@@ -596,6 +602,9 @@ pcie_app_7x  #(
   .cfg_interrupt_stat             ( cfg_interrupt_stat ),
   .cfg_pciecap_interrupt_msgnum   ( cfg_pciecap_interrupt_msgnum ),
 
+  //----------------------------------------------------------------------------------------------------------------//
+  // PCIe R/W interface                                                                                             //
+  //----------------------------------------------------------------------------------------------------------------//
   .rd_addr(rd_addr),
   .rd_be(rd_be),
   .rd_data(rd_data),
@@ -606,7 +615,16 @@ pcie_app_7x  #(
   .wr_be(wr_be),
   .wr_data(wr_data),
   .wr_en(wr_en),
-  .wr_done(wr_done)
+  .wr_done(wr_done),
+
+  //----------------------------------------------------------------------------------------------------------------//
+  // DMA interface                                                                                                  //
+  //----------------------------------------------------------------------------------------------------------------//
+
+  .dma_read_addr(dma_read_addr),
+  .dma_read_len(dma_read_len),
+  .dma_read_valid(dma_read_valid),
+  .current_tag(current_tag)
 
 );
 

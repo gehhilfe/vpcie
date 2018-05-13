@@ -382,12 +382,14 @@ end
     lp_state_handle_write_config = 2,
     lp_state_handle_read_config = 3,
     lp_state_handle_write_mem = 4,
-    lp_state_handle_read_mem = 5;
+    lp_state_handle_read_mem = 5,
+    lp_state_handle_read_dma = 6;
 
   `define OP_READ_CONFIG 0
   `define OP_WRITE_CONFIG 1
   `define OP_READ_MEM 2
   `define OP_WRITE_MEM 3
+  `define OP_READ_DMA 9
 
   always @ ( * ) begin
     vp_state_next = vp_state;
@@ -404,6 +406,7 @@ end
                     `OP_WRITE_CONFIG: vp_state_next = lp_state_handle_write_config;
                     `OP_READ_MEM: vp_state_next = lp_state_handle_read_mem;
                     `OP_WRITE_MEM: vp_state_next = lp_state_handle_write_mem;
+                    `OP_READ_DMA: vp_state_next = lp_state_handle_read_dma;
                 endcase
             end
         end
@@ -444,6 +447,30 @@ end
             $vpcieSendMemReadResponse(P_READ_DATA);
             DEFAULT_TAG = DEFAULT_TAG + 1;
             vp_state_next = lp_state_idle;
+        end
+
+        lp_state_handle_read_dma: begin
+          TSK_TX_CLK_EAT(5);
+          for (i = 0; i < 4096; i = i+1) begin
+              DATA_STORE[i] = board.RP.vpcie_header_inst.recv_payload[i];
+          end
+          for (i = 0; i < vpcie_header_size/64; i = i + 1) begin
+            for (j = 0; j < 64; j = j+1) begin
+              DATA_STORE[j] = board.RP.vpcie_header_inst.recv_payload[((vpcie_header_size/64)*i)+j];
+            end
+            TSK_TX_COMPLETION_DATA(board.RP.com_usrapp.last_read_dma_tag,DEFAULT_TC, 64/4, 64, vpcie_header_addr[6:0], 0, 0);
+          end
+          //TSK_TX_COMPLETION_DATA(board.RP.com_usrapp.frame_store_tx[6],DEFAULT_TC, vpcie_header_size/4, vpcie_header_size, vpcie_header_addr[6:0], 0, 0);
+          /*
+          input    [7:0]    tag_;
+          input    [2:0]    tc_;
+          input    [9:0]    len_;
+          input   [11:0]  byte_count_;
+          input   [6:0]   lower_addr_;
+          input    [2:0]    comp_status_;
+          input        ep_;
+          */
+          vp_state_next = lp_state_idle;
         end
     endcase
   end
@@ -1262,7 +1289,7 @@ end
         reg    [10:0]    _len;
         integer        _j;
         begin
-            $display("[%t] : TSK_TX_COMPLETION_DATA", $realtime);
+            $display("[%t] : TSK_TX_COMPLETION_DATA with TAG=%d", $realtime, tag_);
             if (len_ == 0)
 
                 _len = 1024;
@@ -1292,11 +1319,13 @@ end
                                             2'b00,
                                             2'b00,
                                             len_,           // 32
-                                            COMPLETER_ID_CFG,
+
+                                            REQUESTER_ID,
                                             comp_status_,
                                             1'b0,
                                             byte_count_,    // 64
-                                            REQUESTER_ID,
+
+                                            COMPLETER_ID_CFG,
                                             tag_,
                                             1'b0,
                                             lower_addr_,
@@ -2429,7 +2458,7 @@ end
 
  	// Program PCI Command Register
 
-        TSK_TX_TYPE0_CONFIGURATION_WRITE(DEFAULT_TAG, 12'h04, 32'h00000003, 4'h1);
+        TSK_TX_TYPE0_CONFIGURATION_WRITE(DEFAULT_TAG, 12'h04, 32'h00000007, 4'h1);
         DEFAULT_TAG = DEFAULT_TAG + 1;
         TSK_TX_CLK_EAT(100);
 

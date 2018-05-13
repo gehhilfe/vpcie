@@ -112,7 +112,11 @@ module xilinx_pcie_2_1_rport_7x # (
     .creditToken(vpcie_credit_token)
   );
 
+
+  wire                            trn_clk;
+
   vpcie_header vpcie_header_inst (
+    .clk_i(trn_clk),
     .op(vpcie_header_op),
     .bar(vpcie_header_bar),
     .width(vpcie_header_width),
@@ -135,7 +139,6 @@ module xilinx_pcie_2_1_rport_7x # (
 
   // Local Wires
   // Common
-  wire                            trn_clk;
   wire                            user_reset_out;
   wire                            trn_reset_n;
   wire                            trn_lnk_up;

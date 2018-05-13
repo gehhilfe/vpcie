@@ -65,6 +65,7 @@ reg   [7:0]            frame_store_rx[5119:0];
 integer                frame_store_rx_idx;
 reg   [31:0]           tx_file_ptr;
 reg   [7:0]            frame_store_tx[5119:0];
+reg   [7:0]            last_read_dma_tag;
 integer                frame_store_tx_idx;
 
 reg   [31:0]           log_file_ptr;
@@ -443,7 +444,11 @@ end
       address_low = (address_low << 8) | (txrx ? frame_store_tx[10] : frame_store_rx[10]);
       address_low = (address_low << 8) | (txrx ? frame_store_tx[11] : frame_store_rx[11]);
 
-      $display("Sending dma request to VPICE");
+      if({fmt, f_type} == `PCI_EXP_MEM_READ32 && txrx == `RX_LOG) begin
+        $display("Sending dma request to VPICE tag=%d", tag);
+        last_read_dma_tag = tag;
+        $vpcieSendDmaReadRequest(address_low, length);
+      end
 
       $fdisplay(_log_file_ptr, "\t Requester Id: 0x%h", requester_id);
       $fdisplay(_log_file_ptr, "\t Tag: 0x%h", tag);
